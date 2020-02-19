@@ -73,17 +73,15 @@ class MuseumTest < Minitest:: Test
     @dmns.admit(@patron_2)
     @dmns.admit(@patron_3)
     assert_equal [@patron_1, @patron_3], @dmns.ticket_lottery_contestants(@dead_sea_scrolls)
-    assert_equal [@patron_3], @dmns.ticket_lottery_contestants(@imax)
+    assert_equal [@patron_2], @dmns.ticket_lottery_contestants(@imax)
   end
-  
+
 end
 
 
 
 
-# pry(main)> dmns.ticket_lottery_contestants(dead_sea_scrolls)
-# # => [#<Patron:0x00007fb2011455b8...>, #<Patron:0x6666fb20114megan...>]
-#
+
 # pry(main)> dmns.draw_lottery_winner(dead_sea_scrolls)
 # # => "Johnny" or "Bob" can be returned here. Fun!
 #
