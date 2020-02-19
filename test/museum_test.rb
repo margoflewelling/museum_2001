@@ -1,5 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/pride'
+require 'mocha/minitest'
 require './lib/exhibit'
 require './lib/patron'
 require './lib/museum'
@@ -11,8 +12,9 @@ class MuseumTest < Minitest:: Test
     @dmns = Museum.new("Denver Museum of Nature and Science")
     @gems_and_minerals = Exhibit.new({name: "Gems and Minerals", cost: 0})
     @dead_sea_scrolls = Exhibit.new({name: "Dead Sea Scrolls", cost: 10})
+    @bones = Exhibit.new({name: "Bones", cost: 10})
     @imax = Exhibit.new({name: "IMAX",cost: 15})
-    @patron_1 = Patron.new("Bob", 20)
+    @patron_1 = Patron.new("Bob", 0)
     @patron_1.add_interest("Dead Sea Scrolls")
     @patron_1.add_interest("Gems and Minerals")
     @patron_2 = Patron.new("Sally", 20)
@@ -73,23 +75,28 @@ class MuseumTest < Minitest:: Test
     @dmns.admit(@patron_2)
     @dmns.admit(@patron_3)
     assert_equal [@patron_1, @patron_3], @dmns.ticket_lottery_contestants(@dead_sea_scrolls)
-    assert_equal [@patron_2], @dmns.ticket_lottery_contestants(@imax)
+    assert_equal [], @dmns.ticket_lottery_contestants(@imax)
+  end
+
+  def test_draw_lottery_winner
+    @dmns.add_exhibit(@gems_and_minerals)
+    @dmns.add_exhibit(@dead_sea_scrolls)
+    @dmns.add_exhibit(@imax)
+    @dmns.add_exhibit(@bones)
+
+    @dmns.admit(@patron_1)
+    @dmns.admit(@patron_2)
+    @dmns.admit(@patron_3)
+
+    assert_nil @dmns.draw_lottery_winner(@bones)
+
+    @dmns.stubs(:ticket_lottery_contestants).returns([@patron_3])
+    assert_equal "Johnny", @dmns.draw_lottery_winner(@dead_sea_scrolls)
   end
 
 end
 
 
-
-
-
-# pry(main)> dmns.draw_lottery_winner(dead_sea_scrolls)
-# # => "Johnny" or "Bob" can be returned here. Fun!
-#
-# pry(main)> dmns.draw_lottery_winner(gems_and_minerals)
-# # => nil
-#
-# #If no contestants are elgible for the lottery, nil is returned.
-#
 # pry(main)> dmns.announce_lottery_winner(dead_sea_scrolls)
 # # => "Bob has won the Dead Sea Scrolls exhibit lottery"
 #
