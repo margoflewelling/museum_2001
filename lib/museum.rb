@@ -48,4 +48,13 @@ class Museum
     end
   end
 
+  def announce_lottery_winner(exhibit)
+    if ticket_lottery_contestants(exhibit).length != 0
+      return "#{draw_lottery_winner(exhibit)} has won the #{exhibit.name} exhibit lottery"
+    else
+      return "No winners for this lottery"
+    end
+  end 
+
+
 end
