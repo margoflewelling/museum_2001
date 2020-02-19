@@ -21,6 +21,9 @@ class MuseumTest < Minitest:: Test
     @patron_2.add_interest("IMAX")
     @patron_3 = Patron.new("Johnny", 5)
     @patron_3.add_interest("Dead Sea Scrolls")
+    @tj = Patron.new("TJ", 7)
+    @tj.add_interest("IMAX")
+    @tj.add_interest("Gems and Minerals")
   end
 
   def test_it_exists
