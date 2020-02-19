@@ -64,11 +64,23 @@ class MuseumTest < Minitest:: Test
     expected = {@gems_and_minerals => [@patron_1], @dead_sea_scrolls => [@patron_1, @patron_3], @imax => [@patron_2]}
     assert_equal expected, @dmns.patrons_by_exhibit_interest
   end
+
+  def test_lottery_contestants
+    @dmns.add_exhibit(@gems_and_minerals)
+    @dmns.add_exhibit(@dead_sea_scrolls)
+    @dmns.add_exhibit(@imax)
+    @dmns.admit(@patron_1)
+    @dmns.admit(@patron_2)
+    @dmns.admit(@patron_3)
+    assert_equal [@patron_1, @patron_3], @dmns.ticket_lottery_contestants(@dead_sea_scrolls)
+    assert_equal [@patron_3], @dmns.ticket_lottery_contestants(@imax)
+  end
+  
 end
 
 
 
-#
+
 # pry(main)> dmns.ticket_lottery_contestants(dead_sea_scrolls)
 # # => [#<Patron:0x00007fb2011455b8...>, #<Patron:0x6666fb20114megan...>]
 #
